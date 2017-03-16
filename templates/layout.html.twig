@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block pagetitle '' %} - Księgozbiór</title>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" >
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600|Roboto+Condensed&amp;subset=latin-ext" rel="stylesheet">
+        <script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
+    </head>
+    <body>
+        <header>
+            <div id="logo">
+                <a href="{% if is_granted('ROLE_USER') %}{{ url('user') }}{% else %}{{ url('homepage') }}{% endif %}"><img src="{{ asset('img/logo.png') }}"></a>
+            </div>
+            <div id="logo-label">Księgozbiór <span>{% block pagelabel '' %}</span></div>
+            <div id="nav-btn" class="pull-right">
+                {% if is_granted('ROLE_USER') %}
+                    <div class="btn btn-lg btn-lightblue"><a href="{{ path('user-books') }}">&#8801; Lista</a></div>
+                    <div class="btn btn-lg btn-lightred"><a href="{{ path('user_logout') }}">Wyloguj</a></div>
+                {% else %}
+                    <div class="btn btn-lg btn-lightblue"><a href="{{ path('login') }}">Logowanie</a></div>
+                    <div class="btn btn-lg btn-lightred"><a href="{{ path('register') }}">Rejestracja</a></div>
+                {% endif %}
+            </div>
+            {% if is_granted('ROLE_USER') %}
+                <div class="user-logged pull-right"><a href="{{ path('user') }}"><span class="label pull-right">zalogowano:</span><span class="username">{{ global.user }}</span></a></div>
+            {% endif %}            
+        </header>
+        {% block content %}{% endblock %}
+        <footer>
+            <div id="version"><a href="{{ path('version') }}">Ksiegozbiór<span class="super">&copy;</span> v0.05</a></div>
+            <div id="copyright"><span>created by</span> <img src="{{ asset('img/design.png') }}"</div>
+        </footer>
+        <script src="{{ asset('js/script.js') }}"></script>
+    </body>
+</html>

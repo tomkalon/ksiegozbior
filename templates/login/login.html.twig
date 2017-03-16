@@ -1,0 +1,20 @@
+{% extends "layout.html.twig" %}
+{% block pagetitle 'Logowanie' %}
+
+{% block content %}
+<div class="window" id="login">
+    <div class="window-container">
+        <div class="window-title">
+            Logowanie
+        </div>
+        <div class="box">
+            <form action="{{ path('user_login_check') }}" method="post">
+                {% if error %}<div class="errors"><span>{{ error }}</span></div>{% endif %}
+                <label>Nazwa uzytkownika:</label><input type="text" name="_username" value="{{ last_username }}" />
+                <label>Hasło:</label><input type="password" name="_password" value="" />
+                <button type="submit" value="zaloguj" class="btn btn-lg btn-blue pull-right">zaloguj</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

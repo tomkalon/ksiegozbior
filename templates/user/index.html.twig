@@ -1,0 +1,305 @@
+{% extends "layout.html.twig" %}
+{% block pagetitle 'Panel użytkownika' %}
+{% block pagelabel 'zarządzanie książkami' %}
+
+{% block content %}
+<div id="user-toolbar">
+    <dl>
+        <dt>Liczba książek:</dt>
+        <dd>{{ book_count.books }}</dd>
+        <dt>Przeczytane:</dt>
+        <dd>{{ book_count.readed }}</dd>   
+        <dt>Ulubione:</dt>
+        <dd>{{ book_count.favourite }}</dd>
+        {% if book_count.borrow %}
+        <dt>Pożyczone:</dt>
+        <dd>{{ book_count.borrow }}</dd>
+        {% endif %}
+    </dl>
+    <div class="btn btn-sm btn-green first"><a href="{{ url('user-books') }}0-add" >Dodaj</a></div>
+    <div class="search-form">{{ form_start(search) }}{{ form_end(search) }}</div> 
+    <div class="pull-right">Strona:
+        <div class="btn btn-sm btn-green">
+             <span id="page-number">{{ page_all }}</span> / 
+             <span id="page-all">{{ page_no }}</span>
+        </div>
+        <div class="btn btn-sm btn-blue"><a href="">Widok</a></div>
+    </div>
+</div>
+
+{% if app.session.has('message') %}    
+<div class="window" id="user-messages" style="z-index:14!important;">
+    <div class="window-container">
+        <div class="window-title">Informacja</div>
+        <div class="box">
+            <div class="info">{{ app.session.remove('message') }}</div>
+        </div>
+    </div>
+</div>  
+{% endif %}
+
+{% if action == 'search' %}
+    {% if app.session.get('search_count') %}
+        <div class="container search">Znaleziono <b>{{ app.session.get('search_count') }}</b> pasujących wyników.</div>
+        <div class="user-booklist">
+           <table class="container" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</th>
+                        <th></th>
+                        <th>Tytuł:</th>
+                        <th>Autor:</th>
+                        <th>Wydawnictwo:</th>
+                        <th class="year">Rok wydania:</th>
+                        <th class="pages">Liczba stron:</th>
+                        <th>Kategorie:</th>
+                        <th class="params">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="micro">
+
+                {% set book_number = 0 %}
+                {% for book in app.session.get('book_search') %}
+                {% set book_number = book_number + 1 %}
+                    <tr data-href="{{ book.id }}" {% if (book_number % 2) %}class="odd {% if (book_number == 1) %}first{% endif %}"{% endif %}> 
+                        <td class="id">{{ book_number }}.</td>
+                        <td>
+                            {% if book.image == false %}
+                                <img src="{{ asset('img/no_image.png') }}">
+                            {% else %}
+                                <img src="{{ asset('img/image.png') }}">
+                            {% endif %}
+                        </td>
+                        <td class="name">{{ book.name }}</td>
+                        <td class="author">{{ book.author }}</td>
+                        <td class="publish">{{ book.publish }}</td>
+                        <td class="year">{{ book.year }}</td>
+                        <td class="pages">{{ book.pages }}</td>
+                        <td class="categories">{{ book.categories }}</td>
+                        <td class="params">
+                            {% if book.borrow == true %}<img src="{{ asset('img/borrow.png') }}" alt="pożyczona: <br>{{ book.borrow }}">{% endif %}  
+                            {% if book.private == true %}<img src="{{ asset('img/private.png') }}" alt="Ukryta">{% endif %}                  
+                            {% if book.sell == true %}<img src="{{ asset('img/sell.png') }}" alt="Na sprzedaż">{% endif %}                
+                            {% if book.readed == true %}<img src="{{ asset('img/readed.png') }}" alt="Przeczytana">{% endif %}
+                            {% if book.marked == true %}<img src="{{ asset('img/marked.png') }}" alt="Wyróżniona">{% endif %}
+                            {% if book.favourite == true %}<img src="{{ asset('img/fav.png') }}" alt="Ulubiona">{% endif %}
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+        </div>
+    {% else %}
+    <div class="container search">Nie znaleziono pasujących wyników.</div>
+    {% endif %}
+{% endif %}
+
+{% if book_list and not (action == 'search') %}
+<div class="user-booklist">
+   <table class="container" cellspacing="0">
+        <thead>
+            <tr>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</th>
+                <th></th>
+                <th>Tytuł:</th>
+                <th>Autor:</th>
+                <th>Wydawnictwo:</th>
+                <th class="year">Rok wydania:</th>
+                <th class="pages">Liczba stron:</th>
+                <th>Kategorie:</th>
+                <th class="params">Status</th>
+            </tr>
+        </thead>
+        <tbody class="micro">
+
+        {% set book_number = 0 %}
+        {% for book in book_list %}
+        {% set book_number = book_number + 1 %}
+            <tr data-href="{{ book.id }}" {% if (book_number % 2) %}class="odd {% if (book_number == 1) %}first{% endif %}"{% endif %}> 
+                <td class="id">{{ book_number }}.</td>
+                <td>
+                    {% if book.image == false %}
+                        <img src="{{ asset('img/no_image.png') }}">
+                    {% else %}
+                        <img src="{{ asset('img/image.png') }}">
+                    {% endif %}
+                </td>
+                <td class="name">{{ book.name }}</td>
+                <td class="author">{{ book.author }}</td>
+                <td class="publish">{{ book.publish }}</td>
+                <td class="year">{{ book.year }}</td>
+                <td class="pages">{{ book.pages }}</td>
+                <td class="categories">{{ book.categories }}</td>
+                <td class="params">
+                    {% if book.borrow == true %}<img src="{{ asset('img/borrow.png') }}" alt="pożyczona: <br>{{ book.borrow }}">{% endif %}  
+                    {% if book.private == true %}<img src="{{ asset('img/private.png') }}" alt="Ukryta">{% endif %}                  
+                    {% if book.sell == true %}<img src="{{ asset('img/sell.png') }}" alt="Na sprzedaż">{% endif %}                
+                    {% if book.readed == true %}<img src="{{ asset('img/readed.png') }}" alt="Przeczytana">{% endif %}
+                    {% if book.marked == true %}<img src="{{ asset('img/marked.png') }}" alt="Wyróżniona">{% endif %}
+                    {% if book.favourite == true %}<img src="{{ asset('img/fav.png') }}" alt="Ulubiona">{% endif %}
+           </tr>
+           {% endfor %}
+       </tbody>
+   </table>
+</div>
+{% endif %}
+
+{% if not book_list %}
+<div class="window" id="user-booklist-empty">
+    <div class="window-container">
+        <div class="window-title">Brak książek w bibliotece</div>
+        <div class="box">
+            <div class="warning">Nie posiadasz jeszcze żadnych książek w swojej bibliotece.</div>
+            <p>Aby to zmienić, kliknij na przycisk "DODAJ" i uzupełnij formularz.</p>
+        </div>
+    </div>
+</div>  
+{% endif %}
+
+{% if action == 'add' %}
+<div class="window" id="user-addbook-form">
+    <div class="window-container">
+        <div class="window-title">{{ "Dodawanie książki" }}<span class="js-close btn-close font">X</span></div>
+        <div class="box">
+            {{ form_start(form) }}
+                {% if not form.name.vars.valid %}<div class="errors">{{ form_errors(form.name) }}</div>{% endif %}
+                <div class="form-item {% if not form.name.vars.valid %}error{% endif %}">{{ form_label(form.name) }}{{ form_widget(form.name) }}</div>                    
+                {% if not form.author.vars.valid %}<div class="errors">{{ form_errors(form.author) }}</div>{% endif %}
+                <div class="form-item {% if not form.author.vars.valid %}error{% endif %}">{{ form_label(form.author) }}{{ form_widget(form.author) }}</div>
+                {% if not form.publisher.vars.valid %}<div class="errors">{{ form_errors(form.publisher) }}</div>{% endif %}
+                <div class="form-item {% if not form.publisher.vars.valid %}error{% endif %}">{{ form_label(form.publisher) }}{{ form_widget(form.publisher) }}</div>
+                {% if (not form.year.vars.valid) or (not form.pages.vars.valid) %}<div class="errors">{{ form_errors(form.year) }}{{ form_errors(form.pages) }}</div>{% endif %}
+                <div class="form-item form-short {% if not form.year.vars.valid %}error{% endif %}">{{ form_label(form.year) }}{{ form_widget(form.year) }}</div>
+                <div class="form-item form-short form-label {% if not form.pages.vars.valid %}error{% endif %}">{{ form_label(form.pages) }}{{ form_widget(form.pages) }}</div>
+                <div class="form-item">{{ form_label(form.categories) }}{{ form_widget(form.categories) }}</div>
+                <div class="item-container">
+                    <div class="item">{{ form_widget(form.readed) }}{{ form_label(form.readed) }}</div>
+                    <div class="item">{{ form_widget(form.favourite) }}{{ form_label(form.favourite) }}</div>
+                    <div class="item">{{ form_widget(form.marked) }}{{ form_label(form.marked) }}</div>
+                </div>    
+                <div class="item-container-second">
+                    <div class="item">{{ form_widget(form.borrowcheck) }}{{ form_label(form.borrowcheck) }}</div>
+                    <div class="item">{{ form_widget(form.sell) }}{{ form_label(form.sell) }}</div>
+                    <div class="item">{{ form_widget(form.private) }}{{ form_label(form.private) }}</div>
+                    <div id="borrow-text" class="form-mid hidden">{{ form_widget(form.borrowtext) }}</div>
+                </div>                     
+                <div class="form-item-file">
+                    <div class="file-item">{{ form_widget(form.image) }}{{ form_label(form.image) }}</div>
+                </div>   
+                {{ form_widget(form.submit) }}  
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>   
+{% endif %}
+
+{% if action == 'edit' %}
+<div class="window" id="user-editbook-form">
+    <div class="window-container">
+        <div class="window-title">{{ "Edycja danych książki" }}<span class="js-close btn-close font">X</span></div>
+        <div class="box">
+            {{ form_start(form) }}
+                {% if not form.name.vars.valid %}<div class="errors">{{ form_errors(form.name) }}</div>{% endif %}
+                <div class="form-item {% if not form.name.vars.valid %}error{% endif %}">{{ form_label(form.name) }}{{ form_widget(form.name) }}</div>                    
+                {% if not form.author.vars.valid %}<div class="errors">{{ form_errors(form.author) }}</div>{% endif %}
+                <div class="form-item {% if not form.author.vars.valid %}error{% endif %}">{{ form_label(form.author) }}{{ form_widget(form.author) }}</div>
+                {% if not form.publisher.vars.valid %}<div class="errors">{{ form_errors(form.publisher) }}</div>{% endif %}
+                <div class="form-item {% if not form.publisher.vars.valid %}error{% endif %}">{{ form_label(form.publisher) }}{{ form_widget(form.publisher) }}</div>
+                {% if (not form.year.vars.valid) or (not form.pages.vars.valid) %}<div class="errors">{{ form_errors(form.year) }}{{ form_errors(form.pages) }}</div>{% endif %}
+                <div class="form-item form-short {% if not form.year.vars.valid %}error{% endif %}">{{ form_label(form.year) }}{{ form_widget(form.year) }}</div>
+                <div class="form-item form-short form-label {% if not form.pages.vars.valid %}error{% endif %}">{{ form_label(form.pages) }}{{ form_widget(form.pages) }}</div>
+                <div class="form-item">{{ form_label(form.categories) }}{{ form_widget(form.categories) }}</div>
+                <div class="item-container">
+                    <div class="item">{{ form_widget(form.readed) }}{{ form_label(form.readed) }}</div>
+                    <div class="item">{{ form_widget(form.favourite) }}{{ form_label(form.favourite) }}</div>
+                    <div class="item">{{ form_widget(form.marked) }}{{ form_label(form.marked) }}</div>
+                </div>
+                <div class="item-container-second">
+                    <div class="item">{{ form_widget(form.borrowcheck) }}{{ form_label(form.borrowcheck) }}</div>
+                    <div class="item">{{ form_widget(form.sell) }}{{ form_label(form.sell) }}</div>
+                    <div class="item">{{ form_widget(form.private) }}{{ form_label(form.private) }}</div>
+                    <div id="borrow-text" class="form-mid hidden">{{ form_widget(form.borrowtext) }}</div>
+                </div>
+                <div class="form-item-file">
+                    <div class="file-item">{{ form_widget(form.image) }}{{ form_label(form.image) }}</div>
+                    <div class="item">{{ form_widget(form.image_delete) }}{{ form_label(form.image_delete) }}</div>
+                </div>      
+                <div class="form-item">{{ form_label(form.comment) }}{{ form_widget(form.comment) }}</div>
+                {{ form_widget(form.submit) }}               
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div> 
+{% endif %}
+
+{% if action == 'delete' %}
+<div class="window" id="user-book-delete">
+    <div class="window-container">
+        <div class="window-title">{{ "Usuwanie książki" }}<span class="js-close btn-close font">X</span></div>
+        <div class="box">
+            <div class="warning">Jesteś pewien, że chcesz usunąć tę książkę?</div>
+            <div class="bordered">
+                <div class="small">{{ book_item.author }}</div>
+                <div>{{ book_item.name }}</div>
+            </div>
+            <br>
+            <div class="btn btn-md btn-blue pull-left js-close">Nie</div>
+            <div id="js-book-delete-conf" class="btn btn-md btn-lightred pull-right" data-href="{{ book_item.id }}">Tak</div>
+        </div>
+    </div>
+</div> 
+{% endif %}
+
+{% if action == 'default' %}
+    {% if book_item %}
+        <div class="window" id="user-book">
+            <div class="window-container">
+                <div class="window-title">
+                    <span class="title">{{ book_item.name }}</span>
+                    <span class="js-close btn-close font">X</span>
+                    <span id="js-book-id" class="hidden">{{ book_item.id }}</span>
+                </div>
+                <div class="box">
+                    <div class="image-container">
+                        {% if not book_item.image %}
+                        <img src="{{ asset('img/no-book.png')}}">
+                        {% else %}
+                        <img src="{{ asset('upload/') }}{{ book_item.image }}">
+                        <span>Powiększ</span>
+                        {% endif %}
+                    </div>          
+                    <div class="info-container">
+                        <span class="name">{{ book_item.name }}</span><br>
+                        <span class="author">{{ book_item.author }}</span><br><br>
+                        <span class="publisher">{{ book_item.publish }}</span> (<span class="year">{{ book_item.year }})</span><br>
+                        <span class="pages">Liczba stron: {{ book_item.pages }}</span><br><br>
+                        <span class="categories">KATEGORIE:<br>{{ book_item.categories }}</span><br><br>
+                    </div>
+                    <div class="status">
+                        <img src="{{ asset('img/status.png') }}"> <span>STATUS:</span><span class="date">data dodania książki: &nbsp;&nbsp;{{ book_item.date }}</span>
+                        <hr>
+                        <div class="status_img">
+                            {% if book_item.borrow == true %}<img src="{{ asset('img/borrow.png') }}" alt="Pożyczona: {{ book_item.borrow }}">{% endif %} 
+                            {% if book_item.private == true %}<img src="{{ asset('img/private.png') }}" alt="Ukryta">{% endif %} 
+                            {% if book_item.sell == true %}<img src="{{ asset('img/sell.png') }}" alt="Na sprzedaż">{% endif %} 
+                            {% if book_item.readed == true %}<img src="{{ asset('img/readed.png') }}" alt="Przeczytana">{% endif %} 
+                            {% if book_item.marked == true %}<img src="{{ asset('img/marked.png') }}" alt="Wyróżniona">{% endif %} 
+                            {% if book_item.favourite == true %}<img src="{{ asset('img/fav.png') }}" alt="Ulubiona">{% endif %}
+                        </div>
+                    </div>
+                    {% if book_item.comment %}
+                        <div class="comment">
+                        <img src="{{ asset('img/comment.png') }}"> <span>KOMENTARZ:</span>
+                        <hr>
+                        {{ book_item.comment }}
+                        </div>
+                    {% endif %}
+                    <div id="js-book-edit" class="btn btn-md btn-blue pull-left" data-href="{{ book_item.id }}">Edytuj</div>
+                    <div id="js-book-delete" class="btn btn-md btn-lightred pull-left" data-href="{{ book_item.id }}">Usuń</div>
+                    <div class="btn btn-md btn-lightred pull-right js-close">Zamknij</div>
+                </div>
+            </div>
+        </div>
+    {% endif %} 
+{% endif %}
+
+{% endblock %}

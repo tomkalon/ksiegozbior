@@ -1,0 +1,36 @@
+{% extends "layout.html.twig" %}
+{% block pagetitle 'Panel użytkownika' %}
+{% block pagelabel 'kontrola wersji' %}
+
+{% block content %}
+
+<div class="container"><br>
+    <p style="font-weight:bold;">Księgozbiór v.0.08</p><br>
+    <p>Do zrobienia w v.0.1:</p>
+    <ul>
+        <li><s>Działanie opcji: "szukaj".</s></li>
+        <li>Usuwanie fizyczne zdjęć.</li>
+        <li>Walidator zdjęć.</li>
+        <li><s>Optymalizacja kodu - db(count)</s></li>
+    </ul><br>
+    <p>Do zrobienia w v.0.15:</p>
+    <ul>
+        <li>Paginacja.</li>
+        <li>Go to top.</li>
+    </ul><br>
+    <p>Do zrobienia w v.0.2:</p>
+    <ul>
+        <li>Strona startowa.</li>
+    </ul><br>
+    <p>Do zrobienia w v.0.3:</p>
+    <ul>
+        <li>Domyślna strona użytkownika.</li>
+    </ul><br>
+    <p>Do zrobienia w v.0.3a:</p>
+    <ul>
+        <li>Odzyskiwanie hasła.</li>
+        <li>Captcha.</li>
+    </ul><br>
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "layout.html.twig" %}
+{% block pagetitle 'Rejestracja' %}
+
+{% block content %}
+
+<div class="window" id="registerForm">
+    <div class="window-container">
+        <div class="window-title">
+            Rejestracja
+        </div>
+        <div class="box">
+            <form name="UserRegister" action="" method="post">
+                {% if regform.err_fullname %} <div class="errors"><span>{{ regform.err_fullname }}</span></div> {% endif %}
+                <label>Imię i nazwisko: </label><input type="text" name="fullname" required value="{{ regform.fullname }}">
+                {% if regform.err_username %} <div class="errors"><span>{{ regform.err_username }}</span></div> {% endif %}
+                <label>Nazwa uzytkownika: </label><input type="text" name="username" required value="{{ regform.username }}">
+                {% if regform.err_password %} <div class="errors"><span>{{ regform.err_password }}</span></div> {% endif %}
+                <label>Hasło: </label><input type="password" name="password" required>
+                <label>Powtórz hasło: </label><input type="password" name="rpassword" required>
+                {% if regform.err_email %} <div class="errors"><span>{{ regform.err_email }}</span></div> {% endif %}
+                <label>E-mail: </label><input type="email" name="email" required value="{{ regform.email }}">
+                <label>Powtórz e-mail: </label><input type="email" name="remail" required value="{{ regform.email }}">
+                {% if regform.err_regulations %} <div class="errors"><span>{{ regform.err_regulations }}</span></div> {% endif %}
+                <label>Akceptuję regulamin: </label><input type="checkbox" name="regulations" class="checkbox" required {{ regform.regulations }}>
+                <button type="submit" value="zarejestruj" class="btn btn-lg btn-blue pull-right">Zarejestruj</button>
+                <br><br><br><span class="regulations">Regulamin serwisu "Księgozbiór"</span>
+            </form>  
+        </div>
+    </div>
+</div>
+<span>
+   
+
+
+
+
+</span>
+{% endblock %}
