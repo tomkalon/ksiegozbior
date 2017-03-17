@@ -1,0 +1,48 @@
+<div class="window" id="user-book">
+    <div class="window-container">
+        <div class="window-title">
+            <span class="title">{{ book_item.name }}</span>
+            <span class="js-close btn-close font">X</span>
+            <span id="js-book-id" class="hidden">{{ book_item.id }}</span>
+        </div>
+        <div class="box">
+            <div class="image-container">
+                {% if not book_item.image %}
+                <img src="{{ asset('img/no-book.png')}}">
+                {% else %}
+                <img src="{{ asset('upload/') }}{{ book_item.image }}">
+                <span>Powiększ</span>
+                {% endif %}
+            </div>          
+            <div class="info-container">
+                <span class="name">{{ book_item.name }}</span><br>
+                <span class="author">{{ book_item.author }}</span><br><br>
+                <span class="publisher">{{ book_item.publish }}</span> (<span class="year">{{ book_item.year }})</span><br>
+                <span class="pages">Liczba stron: {{ book_item.pages }}</span><br><br>
+                <span class="categories">KATEGORIE:<br>{{ book_item.categories }}</span><br><br>
+            </div>
+            <div class="status">
+                <img src="{{ asset('img/status.png') }}"> <span>STATUS:</span><span class="date">data dodania książki: &nbsp;&nbsp;{{ book_item.date }}</span>
+                <hr>
+                <div class="status_img">
+                    {% if book_item.borrow == true %}<img src="{{ asset('img/borrow.png') }}" alt="Pożyczona: {{ book_item.borrow }}">{% endif %} 
+                    {% if book_item.private == true %}<img src="{{ asset('img/private.png') }}" alt="Ukryta">{% endif %} 
+                    {% if book_item.sell == true %}<img src="{{ asset('img/sell.png') }}" alt="Na sprzedaż">{% endif %} 
+                    {% if book_item.readed == true %}<img src="{{ asset('img/readed.png') }}" alt="Przeczytana">{% endif %} 
+                    {% if book_item.marked == true %}<img src="{{ asset('img/marked.png') }}" alt="Wyróżniona">{% endif %} 
+                    {% if book_item.favourite == true %}<img src="{{ asset('img/fav.png') }}" alt="Ulubiona">{% endif %}
+                </div>
+            </div>
+            {% if book_item.comment %}
+                <div class="comment">
+                <img src="{{ asset('img/comment.png') }}"> <span>KOMENTARZ:</span>
+                <hr>
+                {{ book_item.comment }}
+                </div>
+            {% endif %}
+            <div id="js-book-edit" class="btn btn-md btn-blue pull-left" data-href="{{ book_item.id }}">Edytuj</div>
+            <div id="js-book-delete" class="btn btn-md btn-lightred pull-left" data-href="{{ book_item.id }}">Usuń</div>
+            <div class="btn btn-md btn-lightred pull-right js-close">Zamknij</div>
+        </div>
+    </div>
+</div>

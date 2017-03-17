@@ -59,22 +59,8 @@ class BookForms {
                     $file = $path.$filename;
                     $flag = file_exists ($file);
                 }
-
                 $files['image']->move($path,$filename);
-                $fileType = exif_imagetype($file);
-                switch ($fileType) {
-                    case 1:
-                        $ext = ".gif";
-                        break;
-                    case 2:
-                        $ext = ".jpg";
-                        break;
-                    case 3:
-                        $ext = ".png";
-                        break;
-                }
-                rename($file, $file.$ext);
-                $this->image = $filename.$ext;
+                $this->image = $filename;
             }
         }
     }

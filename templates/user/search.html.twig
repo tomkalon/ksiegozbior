@@ -1,0 +1,52 @@
+{% if app.session.get('search_count') %}
+    <div class="container search">Znaleziono <b>{{ app.session.get('search_count') }}</b> pasujących wyników.</div>
+    <div class="user-booklist">
+       <table class="container" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</th>
+                    <th></th>
+                    <th>Tytuł:</th>
+                    <th>Autor:</th>
+                    <th>Wydawnictwo:</th>
+                    <th class="year">Rok wydania:</th>
+                    <th class="pages">Liczba stron:</th>
+                    <th>Kategorie:</th>
+                    <th class="params">Status</th>
+                </tr>
+            </thead>
+            <tbody class="micro">
+
+            {% set book_number = 0 %}
+            {% for book in app.session.get('book_search') %}
+            {% set book_number = book_number + 1 %}
+                <tr data-href="{{ book.id }}" {% if (book_number % 2) %}class="odd {% if (book_number == 1) %}first{% endif %}"{% endif %}> 
+                    <td class="id">{{ book_number }}.</td>
+                    <td>
+                        {% if book.image == false %}
+                            <img src="{{ asset('img/no_image.png') }}">
+                        {% else %}
+                            <img src="{{ asset('img/image.png') }}">
+                        {% endif %}
+                    </td>
+                    <td class="name">{{ book.name }}</td>
+                    <td class="author">{{ book.author }}</td>
+                    <td class="publish">{{ book.publish }}</td>
+                    <td class="year">{{ book.year }}</td>
+                    <td class="pages">{{ book.pages }}</td>
+                    <td class="categories">{{ book.categories }}</td>
+                    <td class="params">
+                        {% if book.borrow == true %}<img src="{{ asset('img/borrow.png') }}" alt="pożyczona: <br>{{ book.borrow }}">{% endif %}  
+                        {% if book.private == true %}<img src="{{ asset('img/private.png') }}" alt="Ukryta">{% endif %}                  
+                        {% if book.sell == true %}<img src="{{ asset('img/sell.png') }}" alt="Na sprzedaż">{% endif %}                
+                        {% if book.readed == true %}<img src="{{ asset('img/readed.png') }}" alt="Przeczytana">{% endif %}
+                        {% if book.marked == true %}<img src="{{ asset('img/marked.png') }}" alt="Wyróżniona">{% endif %}
+                        {% if book.favourite == true %}<img src="{{ asset('img/fav.png') }}" alt="Ulubiona">{% endif %}
+               </tr>
+               {% endfor %}
+           </tbody>
+       </table>
+    </div>
+{% else %}
+    <div class="container search">Nie znaleziono pasujących wyników.</div>
+{% endif %}

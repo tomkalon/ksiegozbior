@@ -1,0 +1,15 @@
+<div class="window" id="user-book-delete">
+    <div class="window-container">
+        <div class="window-title">{{ "Usuwanie książki" }}<span class="js-close btn-close font">X</span></div>
+        <div class="box">
+            <div class="warning">Jesteś pewien, że chcesz usunąć tę książkę?</div>
+            <div class="bordered">
+                <div class="small">{{ book_item.author }}</div>
+                <div>{{ book_item.name }}</div>
+            </div>
+            <br>
+            <div class="btn btn-md btn-blue pull-left js-close">Nie</div>
+            <div id="js-book-delete-conf" class="btn btn-md btn-lightred pull-right" data-href="{{ book_item.id }}">Tak</div>
+        </div>
+    </div>
+</div> 

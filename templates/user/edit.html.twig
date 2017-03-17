@@ -1,0 +1,36 @@
+<div class="window" id="user-editbook-form">
+    <div class="window-container">
+        <div class="window-title">{{ "Edycja danych książki" }}<span class="js-close btn-close font">X</span></div>
+        <div class="box">
+            {{ form_start(form) }}
+                {% if not form.name.vars.valid %}<div class="errors">{{ form_errors(form.name) }}</div>{% endif %}
+                <div class="form-item {% if not form.name.vars.valid %}error{% endif %}">{{ form_label(form.name) }}{{ form_widget(form.name) }}</div>                    
+                {% if not form.author.vars.valid %}<div class="errors">{{ form_errors(form.author) }}</div>{% endif %}
+                <div class="form-item {% if not form.author.vars.valid %}error{% endif %}">{{ form_label(form.author) }}{{ form_widget(form.author) }}</div>
+                {% if not form.publisher.vars.valid %}<div class="errors">{{ form_errors(form.publisher) }}</div>{% endif %}
+                <div class="form-item {% if not form.publisher.vars.valid %}error{% endif %}">{{ form_label(form.publisher) }}{{ form_widget(form.publisher) }}</div>
+                {% if (not form.year.vars.valid) or (not form.pages.vars.valid) %}<div class="errors">{{ form_errors(form.year) }}{{ form_errors(form.pages) }}</div>{% endif %}
+                <div class="form-item form-short {% if not form.year.vars.valid %}error{% endif %}">{{ form_label(form.year) }}{{ form_widget(form.year) }}</div>
+                <div class="form-item form-short form-label {% if not form.pages.vars.valid %}error{% endif %}">{{ form_label(form.pages) }}{{ form_widget(form.pages) }}</div>
+                <div class="form-item">{{ form_label(form.categories) }}{{ form_widget(form.categories) }}</div>
+                <div class="item-container">
+                    <div class="item">{{ form_widget(form.readed) }}{{ form_label(form.readed) }}</div>
+                    <div class="item">{{ form_widget(form.favourite) }}{{ form_label(form.favourite) }}</div>
+                    <div class="item">{{ form_widget(form.marked) }}{{ form_label(form.marked) }}</div>
+                </div>
+                <div class="item-container-second">
+                    <div class="item">{{ form_widget(form.borrowcheck) }}{{ form_label(form.borrowcheck) }}</div>
+                    <div class="item">{{ form_widget(form.sell) }}{{ form_label(form.sell) }}</div>
+                    <div class="item">{{ form_widget(form.private) }}{{ form_label(form.private) }}</div>
+                    <div id="borrow-text" class="form-mid hidden">{{ form_widget(form.borrowtext) }}</div>
+                </div>
+                <div class="form-item-file">
+                    <div class="file-item">{{ form_widget(form.image) }}{{ form_label(form.image) }}</div>
+                    <div class="item">{{ form_widget(form.image_delete) }}{{ form_label(form.image_delete) }}</div>
+                </div>      
+                <div class="form-item">{{ form_label(form.comment) }}{{ form_widget(form.comment) }}</div>
+                {{ form_widget(form.submit) }}               
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div> 
