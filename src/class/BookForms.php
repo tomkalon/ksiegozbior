@@ -67,14 +67,7 @@ class BookForms {
     
     public function delete($id, $generator) {
             if($this->action == 'delete-conf') {
-                $date = $this->conn->fetchAssoc(" SELECT image FROM lib_books WHERE id='$id' ");
-                if($date) {
-                    $path = __DIR__.'/../../web/upload/';
-                    $file = $path.$date['image']; 
-                    if(file_exists ($file)){
-                        unlink($file);
-                    }
-                }
+                $this->imageDelete($id);
                 $this->conn->delete('lib_books', array('id' => $id));
                 $this->session->set('message', 'Książka została usunięta.');
                 $url = $generator->generate('user-books');
@@ -83,6 +76,17 @@ class BookForms {
             else { return false; }
     }
     
+    public function imageDelete($id) {
+        $date = $this->conn->fetchAssoc(" SELECT image FROM lib_books WHERE id='$id' ");
+        if($date) {
+            $path = __DIR__.'/../../web/upload/';
+            $file = $path.$date['image']; 
+            if(file_exists ($file)){
+                unlink($file);
+            }
+        }
+    }
+        
     public function database($data, $user, $id){
         if($data['borrowcheck']  === false) {
             $data['borrowtext'] = '';
@@ -110,6 +114,7 @@ class BookForms {
             $this->session->set('message', 'Książka została dodana.');
         }
         if($this->action == 'edit') {
+            if($this->image) {$this->imageDelete($id);}
             $this->conn->update('lib_books', array(
                 'name' => $data['name'],
                 'author' => $data['author'],
@@ -242,13 +247,21 @@ class BookForms {
                 'data'     => $this->marked
             ))
             ->add('image', FileType::class, array(
-                'label'      => 'Zdjęcie',
-                'required'   => false,
-                'label_attr' => array('class' => 'btn btn-sm btn-image'),
-                
+                'label'       => 'Zdjęcie',
+                'required'    => false,
+                'label_attr'  => array('class' => 'btn btn-sm btn-image'),
+                'constraints' => array(new Assert\Image(
+                    array(
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif'
+                        ]
+                    )
+                ))
             ))
             ->add('image_delete', CheckboxType::class, array(
-                'label'      => 'Zdjęcie',
+                'label'      => 'Usuń zdjęcie',
                 'required'   => false,
                 'label_attr' => array('style' => $this->display ),
                 'attr'       => array('style' => $this->display ),
@@ -280,7 +293,7 @@ class BookForms {
     }
     
     public function searchForm() {
-        $searchForm = $this->form->createBuilder(FormType::class)
+        $searchForm = $this->form->createNamedBuilder('search', FormType::class)
             ->add('search_text', TextType::class, array(
                 'constraints'   => array(new Assert\NotBlank()),
                 'label'         => ' ',
@@ -310,11 +323,3 @@ class BookForms {
         return $item;
     }
 }
-
-
-//        'constraints' => array( new Assert\Image(
-//            array(
-//                'mimeTypes' => array(
-//                    'image' => '*'
-//                )
-//        )))

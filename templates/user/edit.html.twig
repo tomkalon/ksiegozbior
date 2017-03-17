@@ -25,6 +25,7 @@
                     <div id="borrow-text" class="form-mid hidden">{{ form_widget(form.borrowtext) }}</div>
                 </div>
                 <div class="form-item-file">
+                   {% if not form.image.vars.valid %}<div class="errors">{{ form_errors(form.image) }}</div>{% endif %}
                     <div class="file-item">{{ form_widget(form.image) }}{{ form_label(form.image) }}</div>
                     <div class="item">{{ form_widget(form.image_delete) }}{{ form_label(form.image_delete) }}</div>
                 </div>      

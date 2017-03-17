@@ -426,6 +426,13 @@ header {
 .form-item-file {
     margin: 15px 0 0 30px;
     height: 40px;
+    .errors {
+        float: left;
+    }
+    ul {
+        width: 425px!important;
+        margin:0 0 20px 0!important;
+    }
 }
 
 .form-label {
@@ -570,7 +577,7 @@ header {
     }
 }
 
-.search { 
+.search {
     margin: 15px auto 10px;
 }
 
@@ -738,7 +745,7 @@ footer {
     .container {
         width: $lg;
     }
-    #user-booklist {
+    .user-booklist {
         .name {
             max-width: 330px;
         }
@@ -755,7 +762,7 @@ footer {
     .container {
         width: $md;
     }
-    #user-booklist {
+    .user-booklist {
         .name {
             max-width: 250px;
         }
@@ -775,7 +782,7 @@ footer {
     .container {
         width: $sm;
     }
-    #user-booklist {
+    .user-booklist {
         .id {
             padding-left: 5px;
         }
