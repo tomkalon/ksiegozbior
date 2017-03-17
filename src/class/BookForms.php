@@ -65,6 +65,24 @@ class BookForms {
         }
     }
     
+    public function delete($id, $generator) {
+            if($this->action == 'delete-conf') {
+                $date = $this->conn->fetchAssoc(" SELECT image FROM lib_books WHERE id='$id' ");
+                if($date) {
+                    $path = __DIR__.'/../../web/upload/';
+                    $file = $path.$date['image']; 
+                    if(file_exists ($file)){
+                        unlink($file);
+                    }
+                }
+                $this->conn->delete('lib_books', array('id' => $id));
+                $this->session->set('message', 'Książka została usunięta.');
+                $url = $generator->generate('user-books');
+                return $url;
+            }
+            else { return false; }
+    }
+    
     public function database($data, $user, $id){
         if($data['borrowcheck']  === false) {
             $data['borrowtext'] = '';
@@ -111,16 +129,6 @@ class BookForms {
             ), array('id' => $id));
             $this->session->set('message', 'Dane książki zostały zaktualizowane.');
         }
-    }
-    
-    public function delete($id, $generator) {
-            if($this->action == 'delete-conf') {
-                $this->conn->delete('lib_books', array('id' => $id));
-                $this->session->set('message', 'Książka została usunięta.');
-                $books_url = $generator->generate('user-books');
-                return $books_url;
-            }
-            else { return false; }
     }
     
     public function setData($id){

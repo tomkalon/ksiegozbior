@@ -68,8 +68,8 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
         $BookForm->upload($form, $request, $data['image_delete']);
         $BookForm->database($data, $user, $id);
         
-        $books_url = $app['url_generator']->generate('user-books', array('id' => $id));
-        return $app->redirect($books_url); 
+        $url = $app['url_generator']->generate('user-books', array('id' => $id));
+        return $app->redirect($url); 
     }
 
     //books dispalay & search
@@ -84,8 +84,8 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
         $searchData = $searchForm->getData();
         $searchQuery = $searchData['search_text'];
         $Books->search($searchQuery, $app['session']);
-        $search_url = $app['url_generator']->generate('user-books', array('id' => 0, 'action' => 'search'));
-        return $app->redirect($search_url); 
+        $url = $app['url_generator']->generate('user-books', array('id' => 0, 'action' => 'search'));
+        return $app->redirect($url); 
     }
         
     return $app['twig']->render('user/index.html.twig', array(
@@ -151,8 +151,8 @@ $app->match('/register', function (Request $request) use($app) {
 
             $regForm = null;
             
-            $registered_url = $app['url_generator']->generate('registered');
-            return $app->redirect($registered_url); 
+            $url = $app['url_generator']->generate('registered');
+            return $app->redirect($url); 
         }
     }
     return $app['twig']->render('login/register.html.twig', array(
