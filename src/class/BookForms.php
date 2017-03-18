@@ -68,8 +68,10 @@ class BookForms {
     public function delete($id, $generator) {
             if($this->action == 'delete-conf') {
                 $this->imageDelete($id);
-                $this->conn->delete('lib_books', array('id' => $id));
-                $this->session->set('message', 'Książka została usunięta.');
+                if($this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id='$id' ")) {
+                    $this->conn->delete('lib_books', array('id' => $id));
+                    $this->session->set('message', 'Książka została usunięta.');
+                }
                 $url = $generator->generate('user-books');
                 return $url;
             }
