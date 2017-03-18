@@ -256,7 +256,14 @@ class BookForms {
                             'image/jpeg',
                             'image/png',
                             'image/gif'
-                        ]
+                        ],
+                        'maxWidth'  => 1000,
+                        'maxHeight' => 750,
+                        'minHeight' => 150,
+                        'minWidth'  => 175,
+                        'maxSize'   => '320k',
+                        'maxRatio'  => 1.8,
+                        'minRatio'  => 1,
                     )
                 ))
             ))
