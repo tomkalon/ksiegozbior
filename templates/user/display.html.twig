@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+{% block pagetitle 'Panel użytkownika' %}
+{% block pagelabel 'twój profil' %}
+
+{% block content %}
+
+   <div class="window" id="user-display-form">
+    <div class="window-container">
+        <div class="window-title">{{ "Ustawienia wyświetlania" }}</div>
+           {{ form_start(display) }}{{ form_end(display) }} 
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

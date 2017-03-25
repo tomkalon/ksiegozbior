@@ -606,6 +606,15 @@ header {
     margin: 15px auto 10px;
 }
 
+#user-display-form {
+    form {
+        width: 475px;
+    }
+    .window-container label {
+        width: 210px;
+    }
+} 
+
 .user-booklist {
     font-size: 14px;
     table {
@@ -667,9 +676,6 @@ header {
         text-align: center;
     }
 }
-
-#user-addbook-form,
-#user-book {}
 
 #user-book {
     .window-container {
