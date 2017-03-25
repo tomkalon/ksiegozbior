@@ -250,6 +250,27 @@ a {
     text-decoration: none;
 }
 
+// go top
+#go-top {
+    position: fixed;
+    bottom: 35px;
+    right: 20px;
+    z-index: 999;
+    border: 1px solid #1e2d3e;
+    height: 35px;
+    opacity: 0.85;
+    display: none;
+}
+
+#go-top img {
+    height: 35px;
+}
+
+#go-top:hover {
+    cursor: pointer;
+    opacity: 1.0;
+}
+
 // header
 header {
     width: 100%;
@@ -431,7 +452,7 @@ header {
     }
     ul {
         width: 425px!important;
-        margin:0 0 20px 0!important;
+        margin: 0 0 20px 0!important;
     }
 }
 
@@ -571,9 +592,13 @@ header {
         border-radius: 3px;
         border: none;
         width: 125px;
-        padding: 3px;
+        padding: 3px 3px 3px 5px;
         margin: 0 5px;
         color: $blue;
+    }
+    input::placeholder {
+        color: #bbb;
+        padding-left: 2px;
     }
 }
 
@@ -709,7 +734,7 @@ header {
 
 footer {
     width: 100%;
-    height: 30px;
+    height: 50px;
     margin: 20px auto 0;
     padding: 30px 0 0;
     background: linear-gradient(#39577d, #314356);
@@ -721,7 +746,7 @@ footer {
 #version {
     float: left;
     font-size: 12px;
-    margin: 7px 0 0 15px;
+    margin: 28px 0 0 15px;
     text-shadow: -1px 1px 2px #000;
 }
 
@@ -732,6 +757,7 @@ footer {
 
 #copyright {
     float: right;
+    margin-top: 20px;
     span {
         margin: 6px 3px 0;
         float: left;

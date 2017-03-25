@@ -27,9 +27,9 @@ function borrowTextChecker() {
 }
 
 function scrollToBook() {
-    if( document.getElementById('js-book-id')){
-        let bookId = document.getElementById('js-book-id').textContent; 
-        let bookSelector = "tr[data-href='"+bookId+"']";
+    if (document.getElementById('js-book-id')) {
+        let bookId = document.getElementById('js-book-id').textContent;
+        let bookSelector = "tr[data-href='" + bookId + "']";
         let bookOffset = $(bookSelector).offset().top;
         $(bookSelector).addClass('show');
         let windowHeight = window.innerHeight / 2;
@@ -55,11 +55,25 @@ function footerPositioner() {
 }
 
 function closeMessageWindow() {
-    if(document.getElementById('user-messages')) {
+    if (document.getElementById('user-messages')) {
         $('#user-messages').delay(1000).fadeOut(150);
     }
 }
 
+function goTop() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        if (!(scrollFlag)) {
+            $('#go-top').fadeIn(500);
+            scrollFlag = true;
+        }
+    }
+    else {
+        if (scrollFlag) {
+            $('#go-top').fadeOut(500);
+            scrollFlag = false;
+        }
+    }
+}
 $('#js-btn-addbook').click(function () {
     $('#user-addbook-form').fadeToggle(100);
     formUserBookChecker();
@@ -82,25 +96,24 @@ $('#js-book-delete-conf[data-href]').click(function () {
 $("input[type=checkbox]").click(function () {
     borrowTextChecker();
 });
-$("td.params img").hover(
-    function() {
-        let getAlt = $(this).attr('alt');
-        $(this).parent().append( $('<div class="tooltip">'+getAlt+'</div>'));
-    },  
-    function() {
-        $(this).parent().find( "div:last" ).remove();
-  } 
-);
-$(".status_img img").hover(
-    function() {
-        let getAlt = $(this).attr('alt');
-        $(this).parent().append( $('<div class="tooltip_window">'+getAlt+'</div>'));
-    },  
-    function() {
-        $(this).parent().find( "div:last" ).remove();
-  } 
-);
-
+$("#go-top").click(function () {
+    jQuery('html, body').animate({
+        scrollTop: jQuery("body").offset().top
+    }, 1000);
+});
+$("td.params img").hover(function () {
+    let getAlt = $(this).attr('alt');
+    $(this).parent().append($('<div class="tooltip">' + getAlt + '</div>'));
+}, function () {
+    $(this).parent().find("div:last").remove();
+});
+$(".status_img img").hover(function () {
+    let getAlt = $(this).attr('alt');
+    $(this).parent().append($('<div class="tooltip_window">' + getAlt + '</div>'));
+}, function () {
+    $(this).parent().find("div:last").remove();
+});
+let scrollFlag = true;
 document.addEventListener("DOMContentLoaded", function () {
     borrowTextChecker();
     addBookActiveChecker();
@@ -108,4 +121,11 @@ document.addEventListener("DOMContentLoaded", function () {
     footerPositioner();
     scrollToBook();
     closeMessageWindow();
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        scrollFlag = false;
+    }
+    goTop();
 });
+window.onscroll = function () {
+    goTop();
+};
