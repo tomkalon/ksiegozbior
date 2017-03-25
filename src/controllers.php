@@ -74,7 +74,7 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
 
     //books dispalay & search
     //get from DB list of books, favourites, readed and borrowed count
-    $Books = new BookDisplay($app['db'], $user, $action);
+    $Books = new BookDisplay($app['db'], $user, $action, $app['session']);
     $bookList = $Books->getBooks('date', 'DESC');
     $bookItem = $Books->getItem($id);
     $bookCount = $Books->getCount();
@@ -83,7 +83,7 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
     if ($searchForm->isValid()) {
         $searchData = $searchForm->getData();
         $searchQuery = $searchData['search_text'];
-        $Books->search($searchQuery, $app['session']);
+        $Books->search($searchQuery);
         $url = $app['url_generator']->generate('user-books', array('id' => 0, 'action' => 'search'));
         return $app->redirect($url); 
     }
@@ -110,10 +110,36 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
 ->assert('page', '\d+')
 ->assert('id', '\d+');
     
+//DISPLAY
+//----------------------------------------------------------------------
+$app->match('/user/display', function (Request $request) use ($app) {
+    
+    $token = $app['security.token_storage']->getToken();
+    if (null !== $token) {
+        $user = $token->getUser();
+    }
+    
+    $Display = new BookDisplay($app['db'], $user, $action, $app['session']);
+    $displayForm = $Display->displayForm($app['form.factory']);
+    
+    $displayForm->handleRequest($request);
+    if ($displayForm->isValid()) {
+        $data = $displayForm->getData();
+        
+        $url = $app['url_generator']->generate('user-books');
+        return $app->redirect($url); 
+    }
+    
+    return $app['twig']->render('user/display.html.twig', array(
+        'display' => $displayForm->createView(), //form
+    ));
+})
+->method('GET|POST')
+->bind('display');
 
 //REGISTER
 //----------------------------------------------------------------------
-$app->match('/register', function (Request $request) use($app) {
+$app->get('/register', function (Request $request) use($app) {
     
     $regForm = new UserRegister($_POST['username'], $_POST['fullname'], $_POST['password'], $_POST['rpassword'], $_POST['email'], $_POST['remail']);
     
