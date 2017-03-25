@@ -81,6 +81,9 @@ $('#js-btn-addbook').click(function () {
 $('.js-close').click(function () {
     $(this).parent().parent().parent().fadeOut(100);
 });
+$('.js-user-books').click(function () {
+    document.location = 'page1-show';
+});
 $('tr[data-href]').click(function () {
     document.location = 'page' + document.getElementById('page-number').textContent + '-show' + $(this).data('href');
 });

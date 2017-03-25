@@ -180,13 +180,13 @@ class BookDisplay {
             ))
             ->add('display_btn', SubmitType::class, array(
                 'label' => 'Ustaw',
-                'attr'  => array('class' => 'btn btn-md btn-green pull-right')
+                'attr'  => array('class' => 'btn btn-md btn-blue pull-right')
             ))
             ->getForm();
         return $displayForm;
     }
     
-    public function setDisplay(){
+    public function setDisplay($data){
         
     }
 }

@@ -125,7 +125,8 @@ $app->match('/user/display', function (Request $request) use ($app) {
     $displayForm->handleRequest($request);
     if ($displayForm->isValid()) {
         $data = $displayForm->getData();
-        
+        $Display->setDisplay($data);
+            
         $url = $app['url_generator']->generate('user-books');
         return $app->redirect($url); 
     }
