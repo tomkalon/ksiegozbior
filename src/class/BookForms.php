@@ -307,7 +307,7 @@ class BookForms {
             ->add('search_text', TextType::class, array(
                 'constraints'   => array(new Assert\NotBlank()),
                 'label'         => ' ',
-                'attr'  => array('placeholder' => 'szukaj')
+                'attr'  => array('placeholder' => 'szukaj...')
             ))
             ->add('search_btn', SubmitType::class, array(
                 'label' => 'Szukaj',

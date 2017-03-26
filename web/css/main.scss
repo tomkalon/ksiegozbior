@@ -250,6 +250,10 @@ a {
     text-decoration: none;
 }
 
+input {
+    font-family: inherit;
+}
+
 // go top
 #go-top {
     position: fixed;
@@ -388,10 +392,22 @@ header {
     input {
         width: 300px;
         border: 0px solid #fff;
-        padding: 3px;
-        color: $darkblue;
+        padding: 3px 3px 3px 5px;
+        color: #314356;
         text-align: left;
         border-radius: 3px;
+        font-size: 14px;
+    }
+    input:focus {
+        background: #eaeaee;
+        border: none;
+        box-shadow: none;
+        font-weight: 700;
+    }
+    select {
+        padding: 2px;
+        border: 1px solid #ffffff;
+        family-font: inherit;
     }
     .checkbox {
         width: 15px !important;
@@ -433,7 +449,7 @@ header {
     label {
         float: left;
         margin: 0px 0 0px 25px;
-        width: 95px;
+        width: 90px;
         text-align: center;
         position: relative;
         bottom: 3px;
@@ -474,7 +490,7 @@ header {
 .form-short {
     display: inline-block;
     input {
-        width: 100px;
+        width: 99px;
     }
 }
 
@@ -595,10 +611,14 @@ header {
         padding: 3px 3px 3px 5px;
         margin: 0 5px;
         color: $blue;
+        background: #fff url('../img/search.png') no-repeat;
+        background-position: 113px 2px;
+                background-size: 17px;
     }
     input::placeholder {
         color: #bbb;
         padding-left: 2px;
+        font-size: 12px;
     }
 }
 
@@ -613,7 +633,7 @@ header {
     .window-container label {
         width: 210px;
     }
-} 
+}
 
 .user-booklist {
     font-size: 14px;
