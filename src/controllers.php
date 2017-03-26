@@ -47,7 +47,6 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
     }
     
     $pageAll = 1;
-    $search = 'znak';
         
     //forms - add, edit book
     $BookForm = new BookForms($app['db'], $app['form.factory'], $action, $app['session']);

@@ -306,7 +306,7 @@ class BookForms {
         $searchForm = $this->form->createNamedBuilder('search', FormType::class)
             ->add('search_text', TextType::class, array(
                 'constraints'   => array(new Assert\NotBlank()),
-                'label'         => ' ',
+                'label'         => 'szukaj',
             ))
             ->add('search_btn', SubmitType::class, array(
                 'label' => 'Szukaj',

@@ -641,13 +641,29 @@ header {
     input {
         border-radius: 3px;
         border: none;
-        width: 125px;
-        padding: 3px 3px 3px 5px;
+        width: 70px;
+        padding: 3px 3px 4px 5px;
         margin: 0 5px;
-        color: $blue;
-        background: #fff url('../img/search.png') no-repeat;
-        background-position: 113px 2px;
-        background-size: 17px;
+        color: #39577d;
+        background: #367db4 url(../img/search.png) no-repeat;
+        background-position: 6px 4px;
+        background-size: 16px;
+        transition: all 0.7s;
+        cursor: pointer;
+        position: relative;
+        left: -43px;
+    }
+    input:focus {
+        width: 140px;
+        background: #fff url('../img/search_focus.png') no-repeat;
+        background-position: 128px 3px;
+        background-size: 16px;
+    }
+    label {
+        position: relative;
+        left: 28px;
+        z-index: 5;
+        cursor: pointer;
     }
 }
 
