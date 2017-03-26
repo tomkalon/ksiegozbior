@@ -102,12 +102,12 @@ header { width: 100%; height: 40px; margin: 0 auto; padding: 10px 0; background:
 .window-container .window-title img { max-height: 10px; }
 .window-container label { font-size: 13px; width: 115px; display: inline-block; text-align: right; margin: 15px 10px 0 0; border-radius: 3px; }
 .window-container input { width: 300px; border: 0px solid #fff; padding: 3px 3px 3px 5px; color: #314356; text-align: left; border-radius: 3px; font-size: 14px; }
-.window-container input:focus { background: #eaeaee; border: none; box-shadow: none; font-weight: 700; }
+.window-container input:focus { background: #eaeaee; border: none; box-shadow: none; }
 .window-container select { padding: 2px; border: 1px solid #ffffff; family-font: inherit; }
 .window-container .checkbox { width: 15px !important; margin-right: 300px; }
 .window-container .pull-right, .window-container .pull-left { margin: 20px 2px; }
 .window-container .center { margin: 15px auto; }
-.window-container textarea { width: 300px; border-radius: 3px; border: none; }
+.window-container textarea { width: 295px; border-radius: 3px; border: none; font-family: inherit; padding: 2px 5px; }
 
 .item-container { padding: 15px 0 0; margin-left: 27px; display: inline-block; }
 
@@ -169,7 +169,6 @@ header { width: 100%; height: 40px; margin: 0 auto; padding: 10px 0; background:
 
 .search-form { display: inline-block; }
 .search-form input { border-radius: 3px; border: none; width: 125px; padding: 3px 3px 3px 5px; margin: 0 5px; color: #39577d; background: #fff url("../img/search.png") no-repeat; background-position: 113px 2px; background-size: 17px; }
-.search-form input::placeholder { color: #bbb; padding-left: 2px; font-size: 12px; }
 
 .search { margin: 15px auto 10px; }
 
@@ -193,7 +192,7 @@ header { width: 100%; height: 40px; margin: 0 auto; padding: 10px 0; background:
 .user-booklist .params { padding-right: 10px; text-align: center; }
 
 #user-book .window-container { width: 700px; }
-#user-book .image-container { width: 180px; float: left; min-height: 150px; background: #2d3946; padding: 5px 4px 0; margin-right: 16px; margin-bottom: 5px; }
+#user-book .image-container { width: 180px; float: left; min-height: 150px; background: #526279; padding: 5px 4px 0; margin-right: 16px; margin-bottom: 5px; }
 #user-book .image-container span { display: block; padding: 5px 7px; width: 166px; text-align: center; text-transform: uppercase; font-size: 11px; }
 #user-book .image-container img { max-width: 180px; box-shadow: -2px 2px 5px 1px rgba(0, 0, 0, 0.1); }
 #user-book .info-container { float: right; width: 425px; font-size: 14px; }

@@ -404,7 +404,6 @@ header {
         background: #eaeaee;
         border: none;
         box-shadow: none;
-        font-weight: 700;
     }
     select {
         padding: 2px;
@@ -423,9 +422,11 @@ header {
         margin: 15px auto;
     }
     textarea {
-        width: 300px;
+        width: 295px;
         border-radius: 3px;
         border: none;
+        font-family: inherit;
+        padding: 2px 5px;
     }
 }
 
@@ -566,6 +567,7 @@ header {
     text-decoration: underline;
 }
 
+
 /* Images Pio-Box */
 
 .resize:hover {
@@ -595,7 +597,6 @@ header {
 #js-piobox-img {
     text-align: center;
 }
-
 
 // user
 #user-toolbar {
@@ -647,11 +648,6 @@ header {
         background: #fff url('../img/search.png') no-repeat;
         background-position: 113px 2px;
         background-size: 17px;
-    }
-    input::placeholder {
-        color: #bbb;
-        padding-left: 2px;
-        font-size: 12px;
     }
 }
 
@@ -738,7 +734,7 @@ header {
         width: 180px;
         float: left;
         min-height: 150px;
-        background: #2d3946;
+        background: #526279;
         padding: 5px 4px 0;
         margin-right: 16px;
         margin-bottom: 5px;
