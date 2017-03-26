@@ -116,6 +116,35 @@ $(".status_img img").hover(function () {
 }, function () {
     $(this).parent().find("div:last").remove();
 });
+jQuery('.resize').click(function () {
+    jQuery('#js-piobox').addClass('box-bg');
+    let windowHeight = window.innerHeight;
+    let windowWidth = window.innerWidth;
+    let imgMaxHeight = windowHeight - 80;
+    let imgMaxWidth = windowWidth - 80;
+    image = jQuery(this).clone();
+    jQuery(image).removeClass('resize');
+    jQuery(image).addClass('box-border');
+    jQuery(image).css('maxHeight', imgMaxHeight);
+    jQuery(image).css('maxWidth', imgMaxWidth);
+    jQuery('#js-piobox-img').append(image);
+    let imgHeight = jQuery(image).height();
+    let imgCalc;
+    let imgTop;
+    if (windowHeight > imgHeight) {
+        imgCalc = ((windowHeight - imgHeight) / 2) - 15;
+        imgTop = '+=' + imgCalc;
+    }
+    else {
+        imgTop = '+=30';
+    }
+    jQuery(image).css('top', imgTop);
+});
+jQuery('#js-piobox').click(function () {
+    jQuery('#js-piobox').toggleClass('box-bg');
+    jQuery('.box-border').detach();
+});
+
 let scrollFlag = true;
 document.addEventListener("DOMContentLoaded", function () {
     borrowTextChecker();

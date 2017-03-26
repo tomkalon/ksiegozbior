@@ -10,7 +10,7 @@
                 {% if not book_item.image %}
                 <img src="{{ asset('img/no-book.png')}}">
                 {% else %}
-                <img src="{{ asset('upload/') }}{{ book_item.image }}">
+                <img src="{{ asset('upload/') }}{{ book_item.image }}" class="resize">
                 <span>Powiększ</span>
                 {% endif %}
             </div>          
@@ -45,4 +45,7 @@
             <div class="btn btn-md btn-lightred pull-right js-close">Zamknij</div>
         </div>
     </div>
+</div>
+<div id="js-piobox">
+    <div id="js-piobox-img"></div>
 </div>
