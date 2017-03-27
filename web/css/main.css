@@ -27,6 +27,8 @@
 
 .bordered { color: #fff; background: #314356; padding: 10px 20px; width: 435px; }
 
+input::placeholder { color: #bbb; }
+
 .btn { transition: all 0.5s; font-family: "Open Sans", sans-serif; text-transform: uppercase; color: #fff; border: none; box-shadow: -1px 1px 1px #314356; display: inline-block; border-radius: 3px; }
 
 .btn-lg { padding: 7px 12px; font-size: 13px; }
@@ -103,7 +105,7 @@ header { width: 100%; height: 40px; margin: 0 auto; padding: 10px 0; background:
 .window-container label { font-size: 13px; width: 115px; display: inline-block; text-align: right; margin: 15px 10px 0 0; border-radius: 3px; }
 .window-container input { width: 300px; border: 0px solid #fff; padding: 3px 3px 3px 5px; color: #314356; text-align: left; border-radius: 3px; font-size: 14px; }
 .window-container input:focus { background: #eaeaee; border: none; box-shadow: none; }
-.window-container select { padding: 2px; border: 1px solid #ffffff; family-font: inherit; }
+.window-container select { padding: 2px; border: 1px solid #ffffff; border-radius: 3px; }
 .window-container .checkbox { width: 15px !important; margin-right: 300px; }
 .window-container .pull-right, .window-container .pull-left { margin: 20px 2px; }
 .window-container .center { margin: 15px auto; }
@@ -176,6 +178,14 @@ header { width: 100%; height: 40px; margin: 0 auto; padding: 10px 0; background:
 
 #user-display-form form { width: 475px; }
 #user-display-form .window-container label { width: 210px; }
+
+#display_info { content: ' '; height: 16px; width: 20px; display: inline-block; position: relative; left: 10px; background: url(../img/info.png) no-repeat; top: 3px; cursor: pointer; }
+
+.display_tooltip { position: absolute; z-index: 10; min-width: 200px; min-height: 10px; display: inline-block; font-size: 12px; background: #314356; border-left: 5px solid #39577d; border-right: 5px solid #39577d; padding: 10px; text-align: justify; margin-top: -80px; }
+
+.window-mod { z-index: 15; }
+
+.windowcontainer-mod { top: 15px; z-index: 20; }
 
 .user-booklist { font-size: 14px; }
 .user-booklist table { padding: 10px 0; }

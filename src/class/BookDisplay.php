@@ -19,7 +19,7 @@ class BookDisplay {
         $this->session = $session;
     }
     
-    public function getBooks($order, $mode) {
+    public function getBooks($order, $mode, $number) {
         $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' ORDER BY $order $mode");
         return $books;
     }
@@ -46,93 +46,36 @@ class BookDisplay {
             $this->session->set('book_search', $search);
             $this->session->set('search_count', $searchCount);
     }
-    private function readDisplay() {
-        $data = $this->conn->fetchAssoc(" SELECT display FROM lib_users WHERE username='$this->user' ");
-        $display = $data['display'];
-        
-        $number = strstr($display, '|', true);
-        if($number !== false) {
-            $display = strstr($display, '|');
-            $display = str_replace("|", "", $display);
-                if($display > 1000) {
-                    $type = "ASC";
-                } 
-                else {
-                    $type = "DESC";
+    
+    private function decoder($encoded) {
+        $data = array();
+        for($i = 0; $i<99; $i++){
+            if(!($i)) {
+                $position = strpos($encoded, '|');
+                if(!($position)) {return false;}
+                $data[$i] = substr($encoded, 0, $position);
+            }
+            else 
+            {
+                $previous_position = $position;
+                $position = strpos($encoded, '|', ++$previous_position);
+                if($position) {
+                    $sub = $position - $previous_position;
+                    $data[$i] = substr($encoded, $previous_position, $sub);   
                 }
+                else {
+                    $data[$i] = substr($encoded, $previous_position); 
+                    $i=100;
+                }
+            }
         }
-        else {
-            $number = 0;
-            $name = 0;
-            $type = 0;
-        }
-
-        $display = $display % 20;
-        
-        switch ($display) {
-            case 0:
-                $order = 'data';
-            break;
-            case 1:
-                $order = 'name';
-            break;
-            case 2:
-                $order = 'author';
-            break;
-            case 3:
-                $order = 'publish';
-            break;
-            case 4:
-                $order = 'year';
-            break;
-            case 5:
-                $order = 'pages';
-            break;
-            case 6:
-                $order = 'categories';
-            break;
-            case 7:
-                $order = 'readed';
-            break;
-            case 8:
-                $order = 'favourite';
-            break;
-            case 9:
-                $order = 'marked';
-            break;
-            case 10:
-                $order = 'borrow';
-            break;
-            case 11:
-                $order = 'sell';
-            break;
-            case 12:
-                $order = 'private';
-            break;
-        }
-        
-        switch ($number) {
-            case 0:
-                $number = 25;
-            break;
-            case 1:
-                $number = 50;
-            break;
-            case 2:
-                $number= 100;
-            break;
-            case 3:
-                $number = 200;
-            break;
-            case 4:
-                $number = 500;
-            break;
-            case 5:
-                $number = 1000;
-            break;
-        }
-            
-        $settings = array($order, $type, $number);
+        return $data;
+    }
+    
+    public function readDisplay() {
+        $data = $this->conn->fetchAssoc(" SELECT display FROM lib_users WHERE username='$this->user' ");
+        $settings = $data['display'];
+        $settings = $this->decoder($settings);
         return $settings;
     }
     
@@ -140,9 +83,9 @@ class BookDisplay {
         $settings = $this->readDisplay();
         $displayForm = $form->createNamedBuilder('display', FormType::class)
             ->add('order', ChoiceType::class, array(
-                'label'         => 'Sortuj wg:',
-                'choices'       => array(
-                    'data'          => 'Daty dodania',
+                'label'    => 'Sortuj wg:',
+                'choices'  => array(
+                    'date'          => 'Daty dodania',
                     'name'          => 'Nazwy ksiązki',
                     'author'        => 'Nazwy autora',
                     'publish'       => 'Nazwy wydawnictwa',
@@ -158,11 +101,11 @@ class BookDisplay {
                 ),
                 'preferred_choices' => array($settings[0]),
             ))
-            ->add('order_type', ChoiceType::class, array(
+            ->add('mode', ChoiceType::class, array(
                 'label'         => 'Kolejnosć:',
                 'choices'       => array(
-                    'DESC'     => 'Malejąco',
-                    'ASC'      => 'Rosnąco'
+                    'DESC'   => 'Malejąco',
+                    'ASC'   => 'Rosnąco'
                 ),
                 'preferred_choices' => array($settings[1]),
             ))
@@ -174,9 +117,10 @@ class BookDisplay {
                     100   => "100",
                     200   => "200",
                     500   => "500",
-                    1000  => "1000"
+                    1000  => "1000",
+                    9999  => "wszystkie"
                 ),
-                'preferred_choices' => array($settings[2]),
+                'preferred_choices' => array(intval($settings[2])),
             ))
             ->add('display_btn', SubmitType::class, array(
                 'label' => 'Ustaw',
@@ -187,6 +131,11 @@ class BookDisplay {
     }
     
     public function setDisplay($data){
-        
+        $settings = $data['order'].'|'.$data['mode'].'|'.$data['number'];
+        $this->conn->update('lib_users', array(
+            'display' => $settings,
+        ), array('username' => $this->user));
+        $this->session->set('message', 'Zmiany zapisane.');
+        $this->session->set('settings', $data);
     }
 }

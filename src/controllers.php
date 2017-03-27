@@ -74,7 +74,8 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
     //books dispalay & search
     //get from DB list of books, favourites, readed and borrowed count
     $Books = new BookDisplay($app['db'], $user, $action, $app['session']);
-    $bookList = $Books->getBooks('date', 'DESC');
+    $settings = $Books->readDisplay();
+    $bookList = $Books->getBooks($settings[0], $settings[1], $settings[3]);
     $bookItem = $Books->getItem($id);
     $bookCount = $Books->getCount();
     
