@@ -154,9 +154,16 @@ class BookDisplay {
     }
     public function setDisplay(){
         $settings = $this->readDisplay();
-        $data['order'] = $settings[0];
-        $data['mode'] = $settings[1];
-        $data['number'] = $settings[2];
+        if($settings) {
+            $data['order'] = $settings[0];
+            $data['mode'] = $settings[1];
+            $data['number'] = $settings[2];
+        }
+        else {
+            $data['order'] = 'date';
+            $data['mode'] = 'DESC';
+            $data['number'] = '25';
+        }
         $this->session->set('settings', $data);
     }
 }
