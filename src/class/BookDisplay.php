@@ -11,6 +11,7 @@ class BookDisplay {
     private $user;
     private $action;
     private $session;
+    private $count_all;
         
     public function __construct(Connection $conn, $user, $action, $session){
         $this->conn = $conn;
@@ -19,8 +20,9 @@ class BookDisplay {
         $this->session = $session;
     }
     
-    public function getBooks($order, $mode, $number) {
-        $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' ORDER BY $order $mode");
+    public function getBooks($order, $mode, $number, $page) {
+        $offset = ($page - 1) * $number;
+        $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' ORDER BY $order $mode LIMIT $number OFFSET $offset");
         return $books;
     }
     public function getItem($id) {
@@ -37,7 +39,18 @@ class BookDisplay {
         $count['readed'] = count($readed);
         $count['favourite'] = count($favourite);
         $count['borrow'] = count($borrow);
+        $this->count_all = $count['books'];
         return $count;
+    }
+    
+    public function getPagesCount($number) {
+        $all_pages = $this->count_all / $number;
+        $all_pages = round($all_pages);
+        if(($this->count_all % $number) < (0.5 * $number))
+        {
+            $all_pages++;
+        }
+        return $all_pages;
     }
     
     public function search($search_query) {
@@ -118,7 +131,7 @@ class BookDisplay {
                     200   => "200",
                     500   => "500",
                     1000  => "1000",
-                    9999  => "wszystkie"
+                    999999  => "wszystkie"
                 ),
                 'preferred_choices' => array(intval($settings[2])),
             ))
@@ -130,12 +143,20 @@ class BookDisplay {
         return $displayForm;
     }
     
-    public function setDisplay($data){
+    public function setDisplayDB($data){
+        $this->session->set('settings', $data);
+        if($data['number'] > 200) {$data['number'] = 200;}
         $settings = $data['order'].'|'.$data['mode'].'|'.$data['number'];
         $this->conn->update('lib_users', array(
             'display' => $settings,
         ), array('username' => $this->user));
         $this->session->set('message', 'Zmiany zapisane.');
+    }
+    public function setDisplay(){
+        $settings = $this->readDisplay();
+        $data['order'] = $settings[0];
+        $data['mode'] = $settings[1];
+        $data['number'] = $settings[2];
         $this->session->set('settings', $data);
     }
 }

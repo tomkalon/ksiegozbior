@@ -15,7 +15,7 @@
         </thead>
         <tbody class="micro">
 
-        {% set book_number = 0 %}
+        {% set book_number = ((page_no - 1) * display_scope) %}
         {% for book in book_list %}
         {% set book_number = book_number + 1 %}
             <tr data-href="{{ book.id }}" {% if (book_number % 2) %}class="odd {% if (book_number == 1) %}first{% endif %}"{% endif %}> 

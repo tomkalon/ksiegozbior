@@ -41,12 +41,8 @@ $app->get('/version', function (Request $request) use ($app) {
 //----------------------------------------------------------------------
 $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $id, $action, $page) use($app) {
     
-    $token = $app['security.token_storage']->getToken();
-    if (null !== $token) {
-        $user = $token->getUser();
-    }
-    
-    $pageAll = 1;
+    $User = new UserID($app['db'], $app['security.token_storage']);
+    $user = $User->getData('username');
         
     //forms - add, edit book
     $BookForm = new BookForms($app['db'], $app['form.factory'], $action, $app['session']);
@@ -71,13 +67,22 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
         return $app->redirect($url); 
     }
 
-    //books dispalay & search
+    //books display & search
     //get from DB list of books, favourites, readed and borrowed count
     $Books = new BookDisplay($app['db'], $user, $action, $app['session']);
-    $settings = $Books->readDisplay();
-    $bookList = $Books->getBooks($settings[0], $settings[1], $settings[3]);
+    
+    //get DisplaySettings from SESSION, else get from DB and save in SESSION
+    $settings = $app['session']->get('settings');
+    if(!($settings)) {
+        $temp = new BookDisplay($app['db'], $user, $action, $app['session']);
+        $temp->setDisplay();
+        unset($temp);
+        $settings = $app['session']->get('settings');
+    }
+    $bookList = $Books->getBooks($settings['order'], $settings['mode'], $settings['number'], $page);
     $bookItem = $Books->getItem($id);
     $bookCount = $Books->getCount();
+    $pageAll = $Books->getPagesCount($settings['number']);
     
     $searchForm->handleRequest($request);
     if ($searchForm->isValid()) {
@@ -91,6 +96,7 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
     return $app['twig']->render('user/index.html.twig', array(
         'page_no'               => $page, //actual page
         'page_all'              => $pageAll, //number of pages
+        'display_scope'         => $settings['number'], // number of displayed books
         'book_list'             => $bookList, //book list
         'book_count'            => $bookCount, // books & its status count
         'book_item'             => $bookItem, //show book
@@ -114,10 +120,8 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
 //----------------------------------------------------------------------
 $app->match('/user/display', function (Request $request) use ($app) {
     
-    $token = $app['security.token_storage']->getToken();
-    if (null !== $token) {
-        $user = $token->getUser();
-    }
+    $User = new UserID($app['db'], $app['security.token_storage']);
+    $user = $User->getData('username');
     
     $Display = new BookDisplay($app['db'], $user, $action, $app['session']);
     $displayForm = $Display->displayForm($app['form.factory']);
@@ -125,7 +129,7 @@ $app->match('/user/display', function (Request $request) use ($app) {
     $displayForm->handleRequest($request);
     if ($displayForm->isValid()) {
         $data = $displayForm->getData();
-        $Display->setDisplay($data);
+        $Display->setDisplayDB($data);
             
         $url = $app['url_generator']->generate('user-books');
         return $app->redirect($url); 
@@ -218,6 +222,7 @@ $app->get('/login', function(Request $request) use ($app) {
 ->bind('login');
 
 $app->get('/logged', function() use ($app) {
+
     return $app['twig']->render('login/login_done.html.twig', array(
     ));
 })

@@ -21,10 +21,12 @@
     <div class="btn btn-sm btn-green first"><a href="{{ url('user-books') }}0-add" >Dodaj</a></div>
     <div class="search-form">{{ form_start(search) }}{{ form_end(search) }}</div> 
     <div class="pull-right">Strona:
-        <div class="btn btn-sm btn-green">
-             <span id="page-number">{{ page_all }}</span> / 
-             <span id="page-all">{{ page_no }}</span>
+        <div class="btn btn-sm btn-green left"><<</div>
+        <div class="btn btn-sm btn-green btn-nav">
+             <span id="page-number">{{ page_no }}</span> / 
+             <span id="page-all">{{ page_all }}</span>
         </div>
+        <div class="btn btn-sm btn-green right">>></div>
         <div class="btn btn-sm btn-blue"><a href="{{ url('display') }}">Widok</a></div>
     </div>
 </div>

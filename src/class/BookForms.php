@@ -264,7 +264,7 @@ class BookForms {
                         'maxHeight' => 750,
                         'minHeight' => 150,
                         'minWidth'  => 175,
-                        'maxSize'   => '320k',
+                        'maxSize'   => '400k',
                         'maxRatio'  => 1.7,
                         'minRatio'  => 0.75,
                     )

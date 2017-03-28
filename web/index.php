@@ -10,5 +10,6 @@ require __DIR__.'/../src/class/UserProvider.php';
 require __DIR__.'/../src/class/UserRegister.php';
 require __DIR__.'/../src/class/BookForms.php';
 require __DIR__.'/../src/class/BookDisplay.php';
+require __DIR__.'/../src/class/UserID.php';
 
 $app->run();

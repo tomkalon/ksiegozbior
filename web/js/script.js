@@ -26,14 +26,8 @@ $('#js-book-delete-conf[data-href]').click(function () {
 $("input[type=checkbox]").click(function () {
     borrowTextChecker();
 });
-// go to top btn
-$("#go-top").click(function () {
-        jQuery('html, body').animate({
-            scrollTop: jQuery("body").offset().top
-        }, 1000);
-    })
-    // tooltips
-    //--- status tooltip
+// tooltips
+//--- status tooltip
 $("td.params img").hover(function () {
     let getAlt = $(this).attr('alt');
     $(this).parent().append($('<div class="tooltip">' + getAlt + '</div>'));
@@ -49,7 +43,7 @@ $(".status_img img").hover(function () {
 //--- info tooltip
 $("#display_number").after('<div id="display_info"></div>');
 $("#display_info").hover(function () {
-    $(this).append($('<div class="display_tooltip">Tylko wartości od 25 do 200 mogą zostać zapisane do ustawień profilu na stałe. Pozostałe posiadaja datę ważnosci równą 60 minut.</div>'))
+    $(this).append($('<div class="display_tooltip">Tylko wartości od 25 do 200 mogą zostać zapisane do ustawień profilu na stałe. Pozostałe są aktualne do końca sesji.</div>'))
 }, function () {
     $(this).parent().find("div:last").remove();
 });
@@ -82,11 +76,38 @@ jQuery('#js-piobox').click(function () {
     jQuery('#js-piobox').toggleClass('box-bg');
     jQuery('.box-border').detach();
 });
+// pagination
+function paginationNav() {
+    actualPage = document.getElementById('page-number').textContent;
+    allPage = document.getElementById('page-all').textContent;
+    if (actualPage <= 1) {
+        $('.left').addClass('btn-muted');
+    }
+    else {
+        $(".left").click(function () {
+            document.location = 'page' + (--actualPage) + '-show';
+        });
+    }
+    if (actualPage >= allPage) {
+        $('.right').addClass('btn-muted');
+    }
+    else {
+        $(".right").click(function () {
+            document.location = 'page' + (++actualPage) + '-show';
+        });
+    }
+    // go to top btn
+    $("#go-top").click(function () {
+        jQuery('html, body').animate({
+            scrollTop: jQuery("body").offset().top
+        }, 1000);
+    });
+}
 // window responsive positioner
 function windowPositioner() {
     let windowHeight = window.innerHeight;
     let elementHeight = $('.window-container').height();
-    if((windowHeight - 150) < elementHeight) {
+    if ((windowHeight - 150) < elementHeight) {
         $('.window-container').addClass('windowcontainer-mod');
         $('.window').addClass('window-mod');
         console.log(windowHeight);
@@ -134,12 +155,6 @@ function scrollToBook() {
 }
 
 function footerPositioner() {
-    if (document.getElementById('logged')) {
-        setTimeout(' document.location = "main"', 1000);
-    }
-    if (document.getElementById('registered')) {
-        setTimeout(' document.location = "login"', 1500);
-    }
     let windowHeight = window.innerHeight;
     let footerOffset = $('footer').offset().top;
     let footerHeight = $('footer').innerHeight();
@@ -170,6 +185,15 @@ function goTop() {
         }
     }
 }
+
+function loginRedirect() {
+    if (document.getElementById('logged')) {
+        setTimeout(' document.location = "main"', 1000);
+    }
+    if (document.getElementById('registered')) {
+        setTimeout(' document.location = "login"', 1500);
+    }
+}
 let scrollFlag = true;
 document.addEventListener("DOMContentLoaded", function () {
     borrowTextChecker();
@@ -179,6 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollToBook();
     closeMessageWindow();
     windowPositioner();
+    loginRedirect();
+    paginationNav();
     if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
         scrollFlag = false;
     }

@@ -21,7 +21,7 @@ $center:0 auto;
 $xl:1850px;
 $lg:1120px;
 $md:950px;
-$sm:740px;
+$sm:900px;
 // mixin
 @mixin reset() {
     margin: 0;
@@ -72,7 +72,7 @@ $sm:740px;
 }
 
 .hidden {
-    display: none;
+    display: none!important;
 }
 
 .center {
@@ -236,6 +236,15 @@ input::placeholder {
     background: #fff;
 }
 
+.btn-nav {
+    margin: 0 -1px 0 0;
+}
+
+.btn-muted {
+    background: #3f4a56!important;
+}
+
+
 // site-topography
 html {
     height: 100%;
@@ -291,6 +300,7 @@ header {
     color: #fff;
     position: relative;
     z-index: 15;
+    min-width: 915px;
 }
 
 #logo {
@@ -615,6 +625,7 @@ header {
     text-align: center;
     position: relative;
     z-index: 15;
+    min-width: 915px;
     dl {
         margin: 10px auto;
         text-align: center;
@@ -851,6 +862,7 @@ footer {
     color: #fff;
     position: relative;
     z-index: 15;
+    min-width: 915px;
 }
 
 #version {
