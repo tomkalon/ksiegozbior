@@ -44,6 +44,7 @@ class BookForms {
         $this->session = $session;
     }
     
+    //upload image
     public function upload($form, $request, $delete){
         if($delete) { $this->image = NULL; }
         else {
@@ -66,10 +67,11 @@ class BookForms {
         }
     }
     
+    //delete books
     public function delete($id, $generator) {
             if($this->action == 'delete-conf') {
                 $this->imageDelete($id);
-                if($this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id='$id' ")) {
+                if($this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id=? ", array($id))) {
                     $this->conn->delete('lib_books', array('id' => $id));
                     $this->session->set('message', 'Książka została usunięta.');
                 }
@@ -79,8 +81,9 @@ class BookForms {
             else { return false; }
     }
     
+    //delete books image file
     public function imageDelete($id) {
-        $date = $this->conn->fetchAssoc(" SELECT image FROM lib_books WHERE id='$id' ");
+        $date = $this->conn->fetchAssoc(" SELECT image FROM lib_books WHERE id=? ", array($id));
         if($date) {
             $path = __DIR__.'/../../web/upload/';
             $file = $path.$date['image']; 
@@ -89,7 +92,8 @@ class BookForms {
             }
         }
     }
-        
+    
+    //changing books information
     public function database($data, $user, $id){
         if($data['borrowcheck']  === false) {
             $data['borrowtext'] = '';
@@ -139,9 +143,10 @@ class BookForms {
         }
     }
     
+    //read book data to display edit
     public function setData($id){
         if($this->action == 'edit') {
-            $data = $this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id='$id' ");
+            $data = $this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id=? ", array($id));
             $this->name = $data['name'];
             $this->author = $data['author'];
             $this->publisher = $data['publish'];
@@ -180,6 +185,7 @@ class BookForms {
         }
     }
     
+    //create add & edit forms
     public function makeForms(){
         if(($this->action == 'add') or ($this->action == 'edit')) {
             $form = $this->form->createBuilder(FormType::class)
@@ -302,6 +308,7 @@ class BookForms {
         }
     }
     
+    //create search from
     public function searchForm() {
         $searchForm = $this->form->createNamedBuilder('search', FormType::class)
             ->add('search_text', TextType::class, array(
@@ -316,6 +323,7 @@ class BookForms {
         return $searchForm;
     }
     
+    //filter special characters in input data
     private function inputFilter($item) {
         $item = mb_strtolower($item,"UTF-8");
         $item = preg_replace('/[^0-9a-z\-]+/', '', $item);

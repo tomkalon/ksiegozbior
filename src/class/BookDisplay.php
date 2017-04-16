@@ -22,19 +22,19 @@ class BookDisplay {
     
     public function getBooks($order, $mode, $number, $page) {
         $offset = ($page - 1) * $number;
-        $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' ORDER BY $order $mode LIMIT $number OFFSET $offset");
+        $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner = ? ORDER BY $order $mode LIMIT $number OFFSET $offset", array($this->user));
         return $books;
     }
     public function getItem($id) {
-        $bookItem = $this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id='$id' ");
+        $bookItem = $this->conn->fetchAssoc(" SELECT * FROM lib_books WHERE id=? AND owner = ?", array($id, $this->user));
         return $bookItem;
     }
     
     public function getCount() {
-        $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' ");
-        $readed = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' AND readed='1' ");
-        $favourite = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' AND favourite='1' ");
-        $borrow = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' AND borrow_check='1' ");
+        $books = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner=? ", array($this->user));
+        $readed = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner=? AND readed='1' ", array($this->user));
+        $favourite = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner=? AND favourite='1' ", array($this->user));
+        $borrow = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner=? AND borrow_check='1' ", array($this->user));
         $count['books'] = count($books);
         $count['readed'] = count($readed);
         $count['favourite'] = count($favourite);
@@ -44,17 +44,12 @@ class BookDisplay {
     }
     
     public function getPagesCount($number) {
-        $all_pages = $this->count_all / $number;
-        $all_pages = round($all_pages);
-        if(($this->count_all % $number) < (0.5 * $number))
-        {
-            $all_pages++;
-        }
+        $all_pages = ceil($this->count_all / $number);
         return $all_pages;
     }
     
     public function search($search_query) {
-            $search = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner= '$this->user' AND (name LIKE '%$search_query%' OR author LIKE '%$search_query%' OR publish LIKE '%$search_query%') ");
+            $search = $this->conn->fetchAll(" SELECT * FROM lib_books WHERE owner=? AND (name LIKE '%$search_query%' OR author LIKE '%$search_query%' OR publish LIKE '%$search_query%') ", array($this->user));
             $searchCount = count($search);
             $this->session->set('book_search', $search);
             $this->session->set('search_count', $searchCount);
@@ -86,7 +81,7 @@ class BookDisplay {
     }
     
     public function readDisplay() {
-        $data = $this->conn->fetchAssoc(" SELECT display FROM lib_users WHERE username='$this->user' ");
+        $data = $this->conn->fetchAssoc(" SELECT display FROM lib_users WHERE id=? ", array($this->user));
         $settings = $data['display'];
         $settings = $this->decoder($settings);
         return $settings;
@@ -149,7 +144,7 @@ class BookDisplay {
         $settings = $data['order'].'|'.$data['mode'].'|'.$data['number'];
         $this->conn->update('lib_users', array(
             'display' => $settings,
-        ), array('username' => $this->user));
+        ), array('id' => $this->user));
         $this->session->set('message', 'Zmiany zapisane.');
     }
     public function setDisplay(){

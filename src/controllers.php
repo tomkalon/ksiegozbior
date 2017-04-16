@@ -41,9 +41,10 @@ $app->get('/version', function (Request $request) use ($app) {
 //----------------------------------------------------------------------
 $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $id, $action, $page) use($app) {
     
-    $User = new UserID($app['db'], $app['security.token_storage']);
-    $user = $User->getData('username');
-        
+    //get username & user id
+    $User = new UserExtended($app['db'], $app['security.token_storage']);
+    $user = $User->getID();
+    
     //forms - add, edit book
     $BookForm = new BookForms($app['db'], $app['form.factory'], $action, $app['session']);
     //search form
@@ -79,10 +80,12 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
         unset($temp);
         $settings = $app['session']->get('settings');
     }
-    $bookList = $Books->getBooks($settings['order'], $settings['mode'], $settings['number'], $page);
-    $bookItem = $Books->getItem($id);
-    $bookCount = $Books->getCount();
-    $pageAll = $Books->getPagesCount($settings['number']);
+    
+
+    $bookList = $Books->getBooks($settings['order'], $settings['mode'], $settings['number'], $page); //show books
+    $bookItem = $Books->getItem($id); //show selected book
+    $bookCount = $Books->getCount(); //get number of books
+    $pageAll = $Books->getPagesCount($settings['number']); //get number of pages
     
     $searchForm->handleRequest($request);
     if ($searchForm->isValid()) {
@@ -120,16 +123,18 @@ $app->match('/user/page{page}-show{id}-{action}', function (Request $request, $i
 //----------------------------------------------------------------------
 $app->match('/user/display', function (Request $request) use ($app) {
     
-    $User = new UserID($app['db'], $app['security.token_storage']);
-    $user = $User->getData('username');
+    //get username & user id
+    $User = new UserExtended($app['db'], $app['security.token_storage']);
+    $user = $User->getID();
     
+    //show display settings form
     $Display = new BookDisplay($app['db'], $user, $action, $app['session']);
     $displayForm = $Display->displayForm($app['form.factory']);
     
     $displayForm->handleRequest($request);
     if ($displayForm->isValid()) {
         $data = $displayForm->getData();
-        $Display->setDisplayDB($data);
+        $Display->setDisplayDB($data); //write data in DB
             
         $url = $app['url_generator']->generate('user-books');
         return $app->redirect($url); 
