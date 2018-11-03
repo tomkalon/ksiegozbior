@@ -13,7 +13,7 @@ $app = new Application();
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options'    => array(
     'driver'        => 'pdo_mysql',
-    'dbname'        => 'db_booklist',
+    'dbname'        => 'booklist-old',
     'dbhost'        => 'localhost',
     'user'          => 'root',
     'password'      => '',
